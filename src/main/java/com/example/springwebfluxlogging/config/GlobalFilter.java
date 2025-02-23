@@ -59,6 +59,7 @@ public class GlobalFilter implements WebFilter {
                         requestBody = exchangeLoggingDecorator.getRequest().getFullBody();
                     }
 
+                    log.debug("path : {}", exchange.getRequest().getPath().value());
                     log.debug("requestBody : {}", requestBody);
                     log.debug("ip : {}", commonService.getRemoteAddr(exchange));
                 });
