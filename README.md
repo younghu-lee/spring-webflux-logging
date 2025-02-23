@@ -10,5 +10,5 @@
 ## This project is an example project to demonstrate how to log in Spring Webflux.
 
 - It is built with Java 21, Gradle, and Spring Webflux.
-- It supports logging for GET, POST, and Multipart requests.
+- It supports logging for GET, POST, PUT and Multipart requests.
 
