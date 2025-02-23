@@ -32,12 +32,11 @@ public class GlobalFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ExchangeLoggingDecorator exchangeLoggingDecorator = new ExchangeLoggingDecorator(exchange);
         return chain.filter(exchangeLoggingDecorator)
-                .publishOn(Schedulers.boundedElastic())
                 .doFinally(signalType -> {
                     String requestBody = "";
                     ObjectMapper objectMapper = new ObjectMapper();
                     HashMap<String, Object> map = new HashMap<>();
-                    MultiValueMap<String, String> multiValueMap = exchangeLoggingDecorator.getRequest().getQueryParams();
+                    MultiValueMap<String, String> multiValueMap = exchange.getRequest().getQueryParams();
                     for (String key : multiValueMap.keySet()) {
                         List<String> data = multiValueMap.get(key);
                         if (data.size() > 1) {
@@ -55,7 +54,8 @@ public class GlobalFilter implements WebFilter {
                     if (exchange.getRequest().getHeaders().getContentType() != null
                         && exchange.getRequest().getHeaders().getContentType().includes(MediaType.MULTIPART_FORM_DATA)) {
                         requestBody = exchangeLoggingDecorator.getFullBody();
-                    } else if (StringUtils.isEmpty(requestBody) || "{}".equals(requestBody) || "POST".equals(exchange.getRequest().getMethod().name())) {
+                    } else if (StringUtils.isEmpty(requestBody) || "{}".equals(requestBody)
+                            || "POST".equals(exchange.getRequest().getMethod().name()) || "PUT".equals(exchange.getRequest().getMethod().name())) {
                         requestBody = exchangeLoggingDecorator.getRequest().getFullBody();
                     }
 

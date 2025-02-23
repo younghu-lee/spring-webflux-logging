@@ -17,7 +17,7 @@ public class ExchangeLoggingDecorator extends ServerWebExchangeDecorator {
 
     private RequestLoggingDecorator requestLoggingDecorator;
 
-    private final StringBuilder body = new StringBuilder();
+    private String body = "";
 
     public ExchangeLoggingDecorator(ServerWebExchange exchange) {
         super(exchange);
@@ -53,7 +53,7 @@ public class ExchangeLoggingDecorator extends ServerWebExchangeDecorator {
                 }
             }
             try {
-                this.body.append(new ObjectMapper().writeValueAsString(map));
+                this.body = new ObjectMapper().writeValueAsString(map);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -61,6 +61,6 @@ public class ExchangeLoggingDecorator extends ServerWebExchangeDecorator {
     }
 
     public String getFullBody() {
-        return this.body.toString();
+        return this.body;
     }
 }
